@@ -177,6 +177,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Cliente\Index.cshtml" />
+    <Content Include="Views\Cliente\Incluir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -210,6 +211,10 @@
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LojaNet.BLL\LojaNet.BLL.csproj">
+      <Project>{d81f85ea-6fd7-40ed-a26e-3e0fa9772aad}</Project>
+      <Name>LojaNet.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LojaNet.Models\LojaNet.Models.csproj">
       <Project>{acbe3dd6-b474-46c1-9b8a-e735deaf7a8d}</Project>
       <Name>LojaNet.Models</Name>

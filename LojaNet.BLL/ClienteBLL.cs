@@ -26,6 +26,14 @@ namespace LojaNet.BLL
             {
                 throw new ApplicationException("O nome deve ser informado!");
             }
+            if (string.IsNullOrEmpty(cliente.Email))
+            {
+                throw new ApplicationException("O email deve ser informado!");
+            }
+            if (string.IsNullOrEmpty(cliente.Telefone))
+            {
+                throw new ApplicationException("O telefone deve ser informado!");
+            }
             if (string.IsNullOrEmpty(cliente.Id))
             {
                 cliente.Id = Guid.NewGuid().ToString();
