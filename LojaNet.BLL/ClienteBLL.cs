@@ -5,22 +5,54 @@ using System.Text;
 using System.Threading.Tasks;
 using LojaNet.Models;
 using LojaNet.DAL;
+using System.Data;
 
 namespace LojaNet.BLL
 {
     public class ClienteBLL : IClienteDados
     {
+        private ClienteDAL dal;
+
+        public ClienteBLL()
+        {
+            this.dal = new ClienteDAL();
+        }
+
         public void Alterar(Cliente cliente)
         {
-            throw new NotImplementedException();
+            ValidarCliente(cliente);
+
+            if (string.IsNullOrEmpty(cliente.Id))
+            {
+                throw new Exception("O Id deve ser informado");
+            }
+
+            dal.Alterar(cliente);
         }
 
         public void Excluir(string Id)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(Id))
+            {
+                throw new Exception("O Id deve ser informado");
+            }
+
+            dal.Excluir(Id);
         }
 
         public void Incluir(Cliente cliente)
+        {
+            ValidarCliente(cliente);
+
+            if (string.IsNullOrEmpty(cliente.Id))
+            {
+                cliente.Id = Guid.NewGuid().ToString();
+            }
+
+            dal.Incluir(cliente);
+        }
+
+        private static void ValidarCliente(Cliente cliente)
         {
             if (string.IsNullOrEmpty(cliente.Nome))
             {
@@ -34,13 +66,6 @@ namespace LojaNet.BLL
             {
                 throw new ApplicationException("O telefone deve ser informado!");
             }
-            if (string.IsNullOrEmpty(cliente.Id))
-            {
-                cliente.Id = Guid.NewGuid().ToString();
-            }
-
-            var dal = new ClienteDAL();
-            dal.Incluir(cliente);
         }
 
         public Cliente ObterPorEmail(string email)
@@ -50,12 +75,13 @@ namespace LojaNet.BLL
 
         public Cliente ObterPorId(string Id)
         {
-            throw new NotImplementedException();
+            return dal.ObterPorId(Id);
         }
 
         public List<Cliente> ObterTodos()
         {
-            throw new NotImplementedException();
+            var lista = dal.ObterTodos();
+            return lista;
         }
     }
 }

@@ -1,9 +1,35 @@
-﻿@model LojaNet.Models.Cliente
+﻿@model IEnumerable<LojaNet.Models.Cliente>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Clientes";
 }
 
 <h2>Clientes</h2>
 
-<a class="btn btn-info" href="/Cliente/Incluir">Novo</a>
+<p>
+    <a class="btn btn-light" href="/Cliente/Incluir">Novo</a>
+</p>
+
+<table class="table"> 
+    <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Telefone</th>
+    </tr>
+
+    @foreach (var cliente in Model)
+     {
+        <tr>
+            <td>
+                <!--<a href="/Clientes/Detalhes/@cliente.Id"> @cliente.Nome</a>-->
+
+                @Html.ActionLink(cliente.Nome,"Detalhes", new { id=cliente.Id})
+            </td>
+
+            <td>@cliente.Email</td>
+
+            <td>@cliente.Telefone</td>
+        </tr>
+     }
+
+</table>

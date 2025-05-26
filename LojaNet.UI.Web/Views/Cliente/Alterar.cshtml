@@ -1,14 +1,15 @@
 ﻿@model LojaNet.Models.Cliente
 
 @{
-    ViewBag.Title = "Incluir";
+    ViewBag.Title = "Alterar";
 }
 
-<h2>Incluir</h2>
+<h2>Alterar</h2>
+
 
 <form method="post" class="form-horizontal">
 
-    @Html.ValidationSummary(null, new { @class="text-danger" })
+    @Html.ValidationSummary(null, new { @class = "text-danger" })
 
     <div class="form-group">
         <label class="control-label" for="Nome">Nome:</label>
@@ -32,8 +33,8 @@
     <br />
 
     <div class="form-group">
-        <input class="btn btn-light" type="submit" value="Gravar" />
         <a href="/Cliente/Index" class="btn btn-light">Voltar</a>
+        <input class="btn btn-light" type="submit" value="Confirmar Alteração" />
     </div>
 
 </form>
