@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using LojaNet.Models;
 
 namespace LojaNet.DAL
@@ -20,6 +23,11 @@ namespace LojaNet.DAL
         }
         public void Excluir(string Id)
         {
+            string arquivo = HttpContext.Current.Server.MapPath("~/App_Data/Cliente_" + Id + ".xml");
+
+            Cliente cliente = ObterPorId(Id);
+            SerializadorHelper.Serializar(arquivo, cliente);
+
             DbHelper.ExecuteNonQuery("ClienteExcluir", "@Id", Id);
         }
         public void Incluir(Cliente cliente)
@@ -60,7 +68,21 @@ namespace LojaNet.DAL
 
         public Cliente ObterPorEmail(string email)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ApplicationException("O e-mail deve ser informado");
+            }
+
+            Cliente cliente = null;
+            using (var reader = DbHelper.ExecuteReader("ClienteObterPorEmail", "@Email", email))
+            {
+                if (reader.Read())
+                {
+                    cliente = ObterClienteReader(reader);
+                }
+            }
+
+            return cliente;
         }
         public Cliente ObterPorId(string Id)
         {

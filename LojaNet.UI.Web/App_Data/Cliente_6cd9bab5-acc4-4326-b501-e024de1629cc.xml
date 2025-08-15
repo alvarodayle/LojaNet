@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Cliente xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Id>6cd9bab5-acc4-4326-b501-e024de1629cc</Id>
+  <Nome>Cesare Bórgia</Nome>
+  <Email>Borgia@teste.com</Email>
+  <Telefone>6787-8767</Telefone>
+</Cliente>

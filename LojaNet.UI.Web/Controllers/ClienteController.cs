@@ -6,16 +6,17 @@ using System.Web.Mvc;
 using LojaNet.Models;
 using LojaNet.BLL;
 using Microsoft.Ajax.Utilities;
+using LojaNet.DAL;
 
 namespace LojaNet.UI.Web.Controllers
 {
     public class ClienteController : Controller
     {
-        private ClienteBLL bll;
+        private IClienteDados bll;
 
         public ClienteController()
         {
-            bll = new ClienteBLL();
+            bll = AppContainer.ObterClienteBLL();
         }
 
         public ActionResult Excluir(string Id)

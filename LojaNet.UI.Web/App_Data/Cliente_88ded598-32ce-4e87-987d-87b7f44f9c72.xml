@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Cliente xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Id>88ded598-32ce-4e87-987d-87b7f44f9c72</Id>
+  <Nome>Carlos Sanchez de Carvalho</Nome>
+  <Email>teste@teste.com.br</Email>
+  <Telefone>123456789</Telefone>
+</Cliente>

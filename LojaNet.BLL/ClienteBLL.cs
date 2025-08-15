@@ -11,11 +11,11 @@ namespace LojaNet.BLL
 {
     public class ClienteBLL : IClienteDados
     {
-        private ClienteDAL dal;
+        private IClienteDados dal;
 
-        public ClienteBLL()
+        public ClienteBLL(IClienteDados clientedados)
         {
-            this.dal = new ClienteDAL();
+            this.dal = clientedados;
         }
 
         public void Alterar(Cliente cliente)
@@ -70,7 +70,7 @@ namespace LojaNet.BLL
 
         public Cliente ObterPorEmail(string email)
         {
-            throw new NotImplementedException();
+            return dal.ObterPorEmail(email);
         }
 
         public Cliente ObterPorId(string Id)
