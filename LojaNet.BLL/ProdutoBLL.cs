@@ -43,6 +43,11 @@ namespace LojaNet.BLL
 
         public void Incluir(Produto produto)
         {
+            if (string.IsNullOrEmpty(produto.Id))
+            {
+                produto.Id = Guid.NewGuid().ToString();
+            }
+
             Validar(produto);
             dal.Incluir(produto);
         }

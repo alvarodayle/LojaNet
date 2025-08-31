@@ -1,11 +1,10 @@
-﻿@model LojaNet.Models.Cliente
+﻿@model LojaNet.Models.Produto
 
 @{
     ViewBag.Title = "Alterar";
 }
 
 <h2>Alterar</h2>
-
 
 <form method="post" class="form-horizontal">
 
@@ -21,21 +20,21 @@
     <br />
 
     <div class="form-group">
-        <label class="control-label" for="Telefone">Telefone</label>
-        <input class="form-control" type="Text" name="Telefone" value="@Model.Telefone" />
+        <label class="control-label" for="Preco">Preço</label>
+        <input class="form-control" type="Text" name="Preco" value="0,00" />
     </div>
 
     <br />
 
     <div class="form-group">
-        <label class="control-label" for="Email">Email</label>
-        <input class="form-control" type="Text" name="Email" value="@Model.Email" />
+        <label class="control-label" for="Estoque">Estoque</label>
+        <input class="form-control" type="Text" name="Estoque" value="@Model.Estoque" />
     </div>
 
     <br />
 
     <div class="form-group">
-        <a href="/Cliente/Index" class="btn btn-light">Voltar</a>
+        <a href="/Produto/Index" class="btn btn-light">Voltar</a>
         <input class="btn btn-light" type="submit" value="Confirmar Alteração" />
     </div>
 

@@ -1,4 +1,4 @@
-﻿@model LojaNet.Models.Cliente
+﻿@model LojaNet.Models.Produto
 
 @{
     ViewBag.Title = "Incluir";
@@ -18,21 +18,22 @@
     <br />
 
     <div class="form-group">
-        <label class="control-label" for="Telefone">Telefone</label>
-        @Html.EditorFor(model => model.Telefone, new { htmlAttributes = new { @class = "form-control" } })
+        <label class="control-label" for="Preco">Preço</label>
+        @Html.EditorFor(model => model.Preco, new { htmlAttributes = new { @class = "form-control" } })
+
     </div>
 
     <br />
 
     <div class="form-group">
-        <label class="control-label" for="Email">Email</label>
-        <input class="form-control" type="Text" name="Email" value="@Model.Email" />
+        <label class="control-label" for="Estoque">Estoque</label>
+        <input class="form-control" type="Text" name="Estoque" value="@Model.Estoque" />
     </div>
 
     <br />
 
     <div class="form-group">
-        <a href="/Cliente/Index" class="btn btn-light">Voltar</a>
+        <a href="/Produto/Index" class="btn btn-light">Voltar</a>
         <input class="btn btn-light" type="submit" value="Gravar" />
     </div>
 

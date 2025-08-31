@@ -1,4 +1,4 @@
-﻿@model LojaNet.Models.Cliente
+﻿@model LojaNet.Models.Produto
 
 @{
     ViewBag.Title = "Excluir";
@@ -6,14 +6,15 @@
 
 <h2>Excluir</h2>
 
-<p>Confirmar a exlusão do cliente: @Model.Nome</p>
+<p>Confirmar a exlusão do produto: @Model.Nome</p>
 
 <br />
 
 <form method="post">
 
     <input type="hidden" name="Id" value="@Model.Id" />
-    <a href="/Cliente/Index" class="btn btn-light">Voltar</a>
+
+    <a href="/Produto/Index" class="btn btn-light">Voltar</a>
     <input class="btn btn-danger" type="submit" value="Confirmar exclusão" />
 
 </form>

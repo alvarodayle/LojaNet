@@ -10,6 +10,7 @@ using LojaNet.DAL;
 
 namespace LojaNet.UI.Web.Controllers
 {
+    [Authorize]
     public class ClienteController : Controller
     {
         private IClienteDados bll;
