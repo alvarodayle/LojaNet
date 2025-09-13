@@ -1,0 +1,54 @@
+﻿@model LojaNet.UI.Web.Models.PedidoViewModel
+
+@{
+    ViewBag.Title = "Incluir";
+}
+
+<h2>Pedidos</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Incluir Novo</h4>
+    <hr />
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Data, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Model.Data.ToString("d")
+
+        </div>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ClienteId, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ClienteId, new SelectList(Model.Clientes, "Id", "Nome", Model.ClienteId), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ClienteId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FormaPagamento, "Forma de Pagamento", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.FormasPagamento, new SelectList(Model.FormasPagamento, Model.FormaPagamento), new { @class = "form-control" })
+        </div>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a href="/Pedido/Index" class="btn btn-light">Voltar</a>
+            <input type="submit" value="Create" class="btn btn-light" />
+        </div>
+    </div>
+</div>
+}

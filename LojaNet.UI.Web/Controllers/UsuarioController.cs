@@ -65,21 +65,28 @@ namespace LojaNet.UI.Web.Controllers
                 ModelState.AddModelError("", "As senhas e a confirmação devem ser iguais");
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                var usuarioStore = new UserStore<IdentityUser>();
-                var usuarioGerenciador = new UserManager<IdentityUser>(usuarioStore);
-                var usuario = new IdentityUser() { UserName = novo.Login };
-
-                var resultado = usuarioGerenciador.Create(usuario, novo.Senha);
-                if (resultado.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    var gerenciadorDeAutenticacao = HttpContext.GetOwinContext().Authentication;
-                    var identidadeUsuario = usuarioGerenciador.CreateIdentity(usuario, DefaultAuthenticationTypes.ApplicationCookie);
-                    gerenciadorDeAutenticacao.SignIn(new AuthenticationProperties() { }, identidadeUsuario);
+                    var usuarioStore = new UserStore<IdentityUser>();
+                    var usuarioGerenciador = new UserManager<IdentityUser>(usuarioStore);
+                    var usuario = new IdentityUser() { UserName = novo.Login };
 
-                    return RedirectToAction("Index", "Home");
+                    var resultado = usuarioGerenciador.Create(usuario, novo.Senha);
+                    if (resultado.Succeeded)
+                    {
+                        var gerenciadorDeAutenticacao = HttpContext.GetOwinContext().Authentication;
+                        var identidadeUsuario = usuarioGerenciador.CreateIdentity(usuario, DefaultAuthenticationTypes.ApplicationCookie);
+                        gerenciadorDeAutenticacao.SignIn(new AuthenticationProperties() { }, identidadeUsuario);
+
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
             }
 
             return View(novo);
