@@ -4,6 +4,23 @@
     ViewBag.Title = "Incluir";
 }
 
+<style>
+    .celula-numero {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    #novoDiv {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    #novoContainer {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+</style>
+
 <h2>Pedidos</h2>
 
 @using (Html.BeginForm()) 
@@ -43,12 +60,67 @@
         </div>
     </div>
 
+    <hr />
+
+    <div id="novoContainer">
+        <button type="button" id="novoButton" class="btn btn-light">Novo</button>
+
+        <div id="novoDiv" style="display:none">
+
+            @Html.DropDownListFor(model => model.NovoItemProdutoId, new SelectList(Model.Produtos, "Id", "Nome"), new { @class = "form-control", style = "float:left; margin-right:10px" })
+            @Html.EditorFor(model => model.NovoItemQuantidade, new { htmlAttributes = new { @class = "form-control", style = "width:70px; float:left; margin-right:10px" } })
+
+            <input type="submit" name="incluirProduto" value="Incluir" class="btn btn-light" />
+        </div>
+
+    </div>
+
+    <div>
+        <table class="table">
+            <tr>
+                <th>Nome do Produto</th>
+                <th class="celula-numero">Quantidade</th>
+                <th class="celula-numero">Preço Unitário</th>
+                <th class="celula-numero">Total</th>
+            </tr>
+
+            @for (int i = 0; i < Model.Itens.Count; i++)
+            {
+
+                @Html.HiddenFor(model => model.Itens[i].ProdutoId)
+                @Html.HiddenFor(model => model.Itens[i].ProdutoNome)
+                @Html.HiddenFor(model => model.Itens[i].Quantidade)
+                @Html.HiddenFor(model => model.Itens[i].Preco)
+
+                <tr>
+                    <td>@Model.Itens[i].ProdutoNome</td>
+                    <td class="celula-numero">@Model.Itens[i].Quantidade</td>
+                    <td class="celula-numero">@Model.Itens[i].Preco.ToString("c")</td>
+                    <td class="celula-numero">@Model.Itens[i].Total.ToString("c")</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
     <br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <a href="/Pedido/Index" class="btn btn-light">Voltar</a>
-            <input type="submit" value="Create" class="btn btn-light" />
+            <input type="submit" name="Gravar" value="Gravar" class="btn btn-light" />
         </div>
     </div>
 </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(function () {
+        $('#novoButton').click(function () {
+            $('#novoDiv').toggle();
+        });
+    });
+</script>
 }
