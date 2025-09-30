@@ -11,7 +11,7 @@ namespace LojaNet.Models
         Dinheiro = 1,
         Cartao = 2,
         Boleto = 3,
-        Deposito = 4,
+        Deposito = 4
 
     }
 }

@@ -1,46 +1,224 @@
-﻿using LojaNet.Models;
-using LojaNet.UI.Web.Models;
+﻿using LojaNet.UI.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LojaNet.Models;
+using LojaNet.DAL;
 
 namespace LojaNet.UI.Web.Controllers
 {
     public class PedidoController : Controller
     {
+        private IPedidoDados bll;
+
+        public PedidoController()
+        {
+            bll = AppContainer.ObterPedidoBLL();
+        }
+
+
+        public ActionResult Detalhes(int id)
+        {
+            var pedido = bll.ObterPorId(id);
+            PedidoViewModel pedidoViewModel = ObterViewModel(pedido);
+
+            var bllProduto = AppContainer.ObterProdutoBLL();
+            var bllCliente = AppContainer.ObterClienteBLL();
+
+            pedidoViewModel.Clientes = bllCliente.ObterTodos();
+
+            pedidoViewModel.Produtos = bllProduto.ObterTodos();
+            pedidoViewModel.Produtos.Insert(0, new Produto() { Id = string.Empty, Nome = string.Empty });
+
+            pedidoViewModel.FormasPagamento = Enum.GetNames(typeof(FormaPagamentoEnum)).ToList();
+
+            return View(pedidoViewModel);
+        }
+
+
+        public ActionResult Alterar(int id)
+        {
+            var pedido = bll.ObterPorId(id);
+            PedidoViewModel pedidoViewModel = ObterViewModel(pedido);
+
+            var bllProduto = AppContainer.ObterProdutoBLL();
+            var bllCliente = AppContainer.ObterClienteBLL();
+
+            pedidoViewModel.Clientes = bllCliente.ObterTodos();
+
+            pedidoViewModel.Produtos = bllProduto.ObterTodos();
+            pedidoViewModel.Produtos.Insert(0, new Produto() { Id = string.Empty, Nome = string.Empty });
+
+            pedidoViewModel.FormasPagamento = Enum.GetNames(typeof(FormaPagamentoEnum)).ToList();
+
+            return View(pedidoViewModel);
+
+        }
+
+        [HttpPost]
+        public ActionResult Alterar(PedidoViewModel pedido)
+        {
+            var bllProduto = AppContainer.ObterProdutoBLL();
+            var bllCliente = AppContainer.ObterClienteBLL();
+
+
+            pedido.Clientes = bllCliente.ObterTodos();
+
+            pedido.Produtos = bllProduto.ObterTodos();
+            pedido.Produtos.Insert(0, new Produto() { Id = string.Empty, Nome = string.Empty });
+
+            pedido.FormasPagamento = Enum.GetNames(typeof(FormaPagamentoEnum)).ToList();
+
+            if (Request.Form["incluirProduto"] == "Incluir")
+            {
+                ProcessarPedidoIncluir(pedido, bllProduto);
+            }
+            else if (Request.Form["excluirProduto"] == "Excluir")
+            {
+                ProcessarPedidoExcluir(pedido, bllProduto);
+            }
+            else if (Request.Form["Gravar"] == "Gravar")
+            {
+
+                var pedidoModel = ObterModel(pedido);
+                bll.Alterar(pedidoModel);
+                return RedirectToAction("Index");
+            }
+
+
+            return View(pedido);
+
+        }
+
+        public ActionResult Index()
+        {
+            var lista = bll.ObterTodos();
+            return View(lista);
+        }
+
+
         [HttpPost]
         public ActionResult Incluir(PedidoViewModel pedido)
         {
-                var bllProduto = AppContainer.ObterProdutoBLL();
-                var bllCliente = AppContainer.ObterClienteBLL();
 
-                pedido.Clientes = bllCliente.ObterTodos();
-                pedido.Produtos = bllProduto.ObterTodos();
-                pedido.FormasPagamento = Enum.GetNames(typeof(FormaPagamentoEnum)).ToList();
+            var bllProduto = AppContainer.ObterProdutoBLL();
+            var bllCliente = AppContainer.ObterClienteBLL();
 
-            if (Request.Form["IncluirProduto"] == "Incluir")
+
+            pedido.Clientes = bllCliente.ObterTodos();
+
+            pedido.Produtos = bllProduto.ObterTodos();
+            pedido.Produtos.Insert(0, new Produto() { Id = string.Empty, Nome = string.Empty });
+
+            pedido.FormasPagamento = Enum.GetNames(typeof(FormaPagamentoEnum)).ToList();
+
+            if (Request.Form["incluirProduto"] == "Incluir")
             {
-                var item = new PedidoViewModel.Item();
-                item.ProdutoId = pedido.NovoItemProdutoId;
-                item.Quantidade = pedido.NovoItemQuantidade;
+                ProcessarPedidoIncluir(pedido, bllProduto);
+            }
+            else if (Request.Form["excluirProduto"] == "Excluir")
+            {
+                ProcessarPedidoExcluir(pedido, bllProduto);
+            }
+            else if (Request.Form["Gravar"] == "Gravar")
+            {
 
-                
-                var produto = bllProduto.ObterPorId(item.ProdutoId);
+                var pedidoModel = ObterModel(pedido);
+                bll.Incluir(pedidoModel);
+                return RedirectToAction("Index");
+            }
+
+
+            return View(pedido);
+        }
+        private PedidoViewModel ObterViewModel(Pedido pedidoModel)
+        {
+            var pedidoViewModel = new PedidoViewModel();
+            pedidoViewModel.Id = pedidoModel.Id;
+            pedidoViewModel.Data = pedidoModel.Data;
+            pedidoViewModel.ClienteId = pedidoModel.Cliente.Id;
+            pedidoViewModel.ClienteNome = pedidoModel.Cliente.Nome;
+            pedidoViewModel.FormaPagamento = pedidoModel.FormaPagamento;
+            int ordem = 1;
+            foreach (var item in pedidoModel.Items)
+            {
+                pedidoViewModel.Items.Add(new PedidoViewModel.Item()
+                {
+                    ProdutoId = item.Produto.Id,
+                    Preco = item.Preco,
+                    Quantidade = item.Quantidade,
+                    ProdutoNome = item.Produto.Nome
+                });
+                ordem++;
+            }
+            return pedidoViewModel;
+        }
+
+
+        private Pedido ObterModel(PedidoViewModel pedidoViewModel)
+        {
+            var pedidoModel = new Pedido();
+            pedidoModel.Id = pedidoViewModel.Id;
+            pedidoModel.Data = pedidoViewModel.Data;
+            pedidoModel.Cliente = new Cliente() { Id = pedidoViewModel.ClienteId };
+            pedidoModel.FormaPagamento = pedidoViewModel.FormaPagamento;
+            int ordem = 1;
+            foreach (var item in pedidoViewModel.Items)
+            {
+                pedidoModel.Items.Add(new Pedido.Item()
+                {
+                    Ordem = ordem,
+                    Preco = item.Preco,
+                    Produto = new Produto() { Id = item.ProdutoId },
+                    Quantidade = item.Quantidade
+                });
+                ordem++;
+            }
+            return pedidoModel;
+        }
+
+        private void ProcessarPedidoExcluir(PedidoViewModel pedido, IProdutosDados bllProduto)
+        {
+
+            var produto = bllProduto.ObterPorId(pedido.ExcluirItemProdutoId);
+            if (produto != null)
+            {
+                var item = pedido.Items.Where(m => m.ProdutoId == pedido.ExcluirItemProdutoId).FirstOrDefault();
+                if (item != null)
+                {
+                    pedido.Items.Remove(item);
+                }
+            }
+        }
+
+        private static void ProcessarPedidoIncluir(PedidoViewModel pedido, IProdutosDados bllProduto)
+        {
+            var item = new PedidoViewModel.Item();
+            item.ProdutoId = pedido.NovoItemProdutoId;
+            item.Quantidade = pedido.NovoItemQuantidade;
+
+            pedido.NovoItemProdutoId = string.Empty;
+            pedido.NovoItemQuantidade = 0;
+
+            var produto = bllProduto.ObterPorId(item.ProdutoId);
+            if (produto != null)
+            {
 
                 item.Preco = produto.Preco;
                 item.ProdutoNome = produto.Nome;
-                pedido.Itens.Add(item);
-            }
 
-            if (Request.Form["GravarPedido"] == "Gravar")
-            {
-                //var bll= AppContainer.ObterPedidoBLL();
-                // Gravar o pedido
+                var itemExistente = pedido.Items.Where(m => m.ProdutoId == item.ProdutoId).FirstOrDefault();
+                if (itemExistente == null)
+                {
+                    pedido.Items.Add(item);
+                }
+                else
+                {
+                    itemExistente.Quantidade += item.Quantidade;
+                }
             }
-
-            return View(pedido);
         }
 
         public ActionResult Incluir()
@@ -48,12 +226,17 @@ namespace LojaNet.UI.Web.Controllers
             var bllCliente = AppContainer.ObterClienteBLL();
             var bllProduto = AppContainer.ObterProdutoBLL();
 
+
             var pedido = new PedidoViewModel();
             pedido.Clientes = bllCliente.ObterTodos();
+
             pedido.Produtos = bllProduto.ObterTodos();
+            pedido.Produtos.Insert(0, new Produto() { Id = string.Empty, Nome = string.Empty });
+
+            pedido.NovoItemProdutoId = string.Empty;
+            pedido.NovoItemQuantidade = 0;
 
             pedido.FormasPagamento = Enum.GetNames(typeof(FormaPagamentoEnum)).ToList();
-
             return View(pedido);
         }
     }

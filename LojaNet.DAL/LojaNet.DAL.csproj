@@ -55,6 +55,7 @@
     <Compile Include="ClienteDAL.cs" />
     <Compile Include="DbHelper.cs" />
     <Compile Include="LojaContext.cs" />
+    <Compile Include="PedidoDAL.cs" />
     <Compile Include="ProdutoDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializadorHelper.cs" />
@@ -68,6 +69,10 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="scripts\scripts.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

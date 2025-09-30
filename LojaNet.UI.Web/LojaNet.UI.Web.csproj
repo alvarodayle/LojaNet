@@ -244,7 +244,10 @@
     <Content Include="Views\Produto\Detalhes.cshtml" />
     <Content Include="Views\Usuario\Login.cshtml" />
     <Content Include="Views\Usuario\Registro.cshtml" />
+    <Content Include="Views\Pedido\Alterar.cshtml" />
+    <Content Include="Views\Pedido\Detalhes.cshtml" />
     <Content Include="Views\Pedido\Incluir.cshtml" />
+    <Content Include="Views\Pedido\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
